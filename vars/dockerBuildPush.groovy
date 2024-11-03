@@ -5,7 +5,9 @@ def call(Map config = [:]) {
     def gitBranch = config.gitBranch ?: 'main'
 
     pipeline {
-        agent any        environment {
+        agent any
+
+        environment {
             DOCKER_IMAGE = "${dockerImage}"
             DOCKER_REGISTRY_CREDENTIALS = credentials("${dockerCredentialsId}")
         }
@@ -62,4 +64,5 @@ def call(Map config = [:]) {
                 }
             }
         }
-   
+    }
+}
