@@ -15,26 +15,37 @@ def call(Map config = [:]) {
         stages {
             stage('Checkout') {
                 steps {
-                    git branch: "${gitBranch}",
-                        url: "${gitUrl}"
+                    script {
+                        // Checkout repository for Windows compatibility
+                        bat "git clone -b ${gitBranch} ${gitUrl}"
+                    }
                 }
             }
 
             stage('Docker Login') {
                 steps {
-                    dockerLogin()
+                    script {
+                        // Docker login command compatible with Windows
+                        bat "docker login -u ${DOCKER_REGISTRY_CREDENTIALS_USR} -p ${DOCKER_REGISTRY_CREDENTIALS_PSW}"
+                    }
                 }
             }
 
             stage('Docker Build') {
                 steps {
-                    dockerBuild()
+                    script {
+                        // Docker build command compatible with Windows
+                        bat "docker build -t ${DOCKER_IMAGE} ."
+                    }
                 }
             }
 
             stage('Docker Push') {
                 steps {
-                    dockerPush()
+                    script {
+                        // Docker push command compatible with Windows
+                        bat "docker push ${DOCKER_IMAGE}"
+                    }
                 }
             }
         }
@@ -47,7 +58,10 @@ def call(Map config = [:]) {
                 echo "Pipeline failed! Check the logs for details."
             }
             always {
-                cleanupDocker()
+                script {
+                    // Cleanup Docker containers or images if necessary
+                    bat "docker system prune -f"
+                }
             }
         }
     }
