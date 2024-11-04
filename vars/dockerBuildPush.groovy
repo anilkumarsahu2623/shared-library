@@ -17,6 +17,7 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         // Checkout repository for Windows compatibility
+                        bat 'rmdir /S /Q Ecom_project'
                         bat "git clone -b ${gitBranch} ${gitUrl}"
                     }
                 }
