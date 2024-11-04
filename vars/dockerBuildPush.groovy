@@ -36,7 +36,8 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         // Docker build command compatible with Windows
-                        bat "docker build -t ${DOCKER_IMAGE} ."
+                        //bat "docker build -t ${DOCKER_IMAGE} ."
+                        bat 'docker build -t anilkumarsahu2623/ecom_project -f Ecom_project/Dockerfile .'
                     }
                 }
             }
